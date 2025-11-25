@@ -29,7 +29,8 @@ export default function Home() {
     const fetchProperties = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('/api/properties');
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/properties`;
+        const response = await fetch(apiUrl);
         const data: Property[] = await response.json();
         setProperties(data);
         setFilteredProperties(data); // เริ่มต้นให้แสดงทั้งหมด
@@ -46,7 +47,8 @@ export default function Home() {
     setIsLoading(true);
     const query = new URLSearchParams(criteria as any).toString();
     try {
-      const response = await fetch(`/api/properties?${query}`);
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/properties?${query}`;
+      const response = await fetch(apiUrl);
       const data: Property[] = await response.json();
       setFilteredProperties(data);
     } catch (error) {
