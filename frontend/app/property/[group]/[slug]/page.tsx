@@ -34,12 +34,12 @@ interface SheetProperty {
 
 // --- ฟังก์ชันสำหรับสร้าง Metadata แบบไดนามิก ---
 // ฟังก์ชันนี้จะรันบน Server ก่อนที่หน้าเว็บจะถูกสร้าง
-export async function generateMetadata(props: {
+export async function generateMetadata({
+  params,
+}: {
   params: { group: string; slug: string };
 }): Promise<Metadata> {
-  // แก้ไข: await props.params เพื่อให้ได้ object ที่แท้จริงออกมาก่อน
-  const params = await props.params;
-  const { slug } = params; // ตอนนี้สามารถดึง slug ออกมาได้แล้ว
+  const { slug } = params; // params เป็น object ธรรมดา ไม่ต้อง await
   try {
     // ดึงข้อมูลทั้งหมด แล้วค้นหาเฉพาะรายการที่ต้องการ
     const allProperties = (await getAllPropertiesFromSheet()) as Property[];
@@ -61,12 +61,11 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function Page(props: {
+export default async function Page({
+  params,
+}: {
   params: { group: string; slug: string };
 }) {
-  // แก้ไข: await props.params จะได้ object ออกมาโดยตรง ไม่ต้อง JSON.parse
-  const params = await props.params;
-
   // เปลี่ยนจากการ fetch มาเป็นการหาข้อมูลจากที่ดึงมาแล้วโดยตรง
   const allProperties = (await getAllPropertiesFromSheet()) as Property[];
   // แก้ไข: ใช้ .trim() เพื่อตัดช่องว่างที่อาจแฝงมากับข้อมูลก่อนเปรียบเทียบ
